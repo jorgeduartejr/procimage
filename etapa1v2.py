@@ -66,17 +66,32 @@ def carregar_imagem():
         painel_imagem_original.config(image=img_exibicao)
         painel_imagem_original.image = img_exibicao
 
-# Funções para os filtros passa-alta (refatoradas sem cv2)
 def filtro_passa_alta():
     if img_original is not None:
+        # Converte a imagem PIL para um array NumPy
         img_array = np.array(img_original)
-        kernel_size = 15
+        
+        # Define o tamanho do kernel (reduzido para 5x5)
+        kernel_size = 5
         kernel = np.ones((kernel_size, kernel_size)) / (kernel_size ** 2)
+        
+        # Aplica a suavização (passa-baixa) com o filtro de média
         img_suave = aplicar_filtro_movel(img_array, kernel)
-        img_filtrada = img_array - img_suave
+        
+        # Calcula a diferença entre a imagem original e a suavizada (passa-alta)
+        img_filtrada = img_array.astype(np.float32) - img_suave.astype(np.float32)
+        
+        # Amplifica o contraste das bordas (opcional)
+        fator_amplificacao = 2.0
+        img_filtrada = fator_amplificacao * img_filtrada
+        
+        # Normaliza os valores da imagem para o intervalo [0, 255]
         img_filtrada = np.clip(img_filtrada, 0, 255).astype(np.uint8)
+        
+        # Converte a imagem filtrada de volta para formato PIL e exibe
         img_filtrada_pil = Image.fromarray(img_filtrada)
         exibir_imagem_filtrada(img_filtrada_pil)
+
 
 def filtro_laplaciano():
     if img_original is not None:
