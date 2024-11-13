@@ -1,5 +1,4 @@
 import numpy as np
-from PIL import Image, ImageTk, ImageFilter
 import tkinter as tk
 from tkinter import filedialog
 
@@ -65,6 +64,8 @@ def carregar_imagem():
         img_exibicao = ImageTk.PhotoImage(img_original)
         painel_imagem_original.config(image=img_exibicao)
         painel_imagem_original.image = img_exibicao
+
+from PIL import Image, ImageTk, ImageFilter
 
 def filtro_passa_alta():
     if img_original is not None:
